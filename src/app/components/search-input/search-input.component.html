@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>Insert your vocabulary file</h1>
+  </div>
+  <div class="col-md-12">
+    <kendo-upload
+      [withCredentials]="false"
+      [autoUpload]="true"
+      [saveUrl]="'http://localhost:3000/files'"
+      (success)="onSuccess($event)"
+      [multiple]="false">
+    </kendo-upload>
+  </div>
+  <div class="col-md-12">
+    <h1>or type yours</h1>
+  </div>
+</div>
+<app-search-result *ngIf = "result.length" [data]="result"></app-search-result>

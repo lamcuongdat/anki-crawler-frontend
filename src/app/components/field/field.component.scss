@@ -1,0 +1,5 @@
+:host{
+  ::ng-deep input.ng-dirty:not(.ng-valid) {
+    background-color: red;
+  }
+}
