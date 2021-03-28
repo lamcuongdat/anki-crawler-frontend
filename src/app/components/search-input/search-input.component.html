@@ -6,7 +6,7 @@
     <kendo-upload
       [withCredentials]="false"
       [autoUpload]="true"
-      [saveUrl]="'http://localhost:3000/files'"
+      [saveUrl]="savUrl"
       (success)="onSuccess($event)"
       [multiple]="false">
     </kendo-upload>
@@ -14,5 +14,15 @@
   <div class="col-md-12">
     <h1>or type yours</h1>
   </div>
+  <div class="col-md-11">
+    <kendo-multiselect [data]="wordList" (keyup.enter)="onInsertWord()" [(value)]="insertedWords"></kendo-multiselect>
+  </div>
+  <div class="col-md-1">
+    <button class="btn btn-primary"
+            [disabled]="this.insertedWords.length <= 0"
+            (click)="onGetAnkiObjects()">Get
+    </button>
+  </div>
 </div>
-<app-search-result *ngIf = "result.length" [data]="result"></app-search-result>
+<app-search-result *ngIf="result.length" [data]="result"
+                   (updateData)="updateData($event)"></app-search-result>

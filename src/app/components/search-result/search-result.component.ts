@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {AnkiDto} from "../../dtos/AnkiDto";
 import {CellClickEvent, RemoveEvent} from "@progress/kendo-angular-grid";
 import {EditDialogComponent} from "../edit-dialog/edit-dialog.component";
@@ -14,6 +14,7 @@ export interface KendoGridColumn {
 })
 export class SearchResultComponent implements OnInit {
   @Input() data: AnkiDto[] = [];
+  @Output() updateData: EventEmitter<AnkiDto[]> = new EventEmitter<AnkiDto[]>();
   editEvent: CellClickEvent | undefined;
   @ViewChild(EditDialogComponent) editDialog: EditDialogComponent | undefined;
 
@@ -41,6 +42,7 @@ export class SearchResultComponent implements OnInit {
   onSave(saveObject: AnkiDto) {
     if (this.editEvent?.rowIndex != undefined) {
       this.data[this.editEvent?.rowIndex] = Object.assign<AnkiDto, AnkiDto>(this.data[this.editEvent?.rowIndex], saveObject);
+      this.updateData.emit(this.data);
     }
   }
 
@@ -51,6 +53,7 @@ export class SearchResultComponent implements OnInit {
 
   onRemove($event: RemoveEvent) {
     this.data = this.data.filter((anki: AnkiDto) => anki.name !== (<AnkiDto>$event.dataItem).name)
+    this.updateData.emit(this.data);
   }
 
   onPlaySound(sound: string): void {
