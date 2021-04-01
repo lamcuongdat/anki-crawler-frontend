@@ -1,5 +1,6 @@
 :host{
   ::ng-deep input.ng-dirty:not(.ng-valid) {
-    background-color: red;
+    // TODO replace this color
+    border-color: red;
   }
 }

@@ -32,10 +32,10 @@
             ],
             "styles": [
               {
-                "input": "./node_modules/@progress/kendo-theme-default/dist/all.css"
+                "input": "./node_modules/@progress/kendo-theme-bootstrap/dist/all.scss"
               },
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.scss"
+              "./src/styles.scss"
             ],
             "scripts": []
           },
@@ -102,7 +102,7 @@
               {
                 "input": "./node_modules/@progress/kendo-theme-default/dist/all.css"
               },
-              "src/styles.scss"
+              "./src/styles.scss"
             ],
             "scripts": []
           }

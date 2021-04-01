@@ -1,94 +1,114 @@
-<kendo-dialog title="Please confirm"
+<kendo-dialog title="Vocabulary information"
               (close)="onClose()"
               *ngIf="open"
               [minWidth]="250"
-              [maxHeight]="700"
-              [width]="900">
+              [height]="'100%'"
+              [width]="'100%'">
   <form [formGroup]="form">
-    <div class="form-group row">
-      <label for="picture" class="col-md-4 col-form-label">Image link</label>
-      <div class="col-md-8">
-        <app-field>
-          <input formControlName="picture" type="text" class="form-control" id="picture" placeholder="Image link">
-        </app-field>
-      </div>
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
-        <img [src]="formControls.picture.value" alt="" class="img-thumbnail">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="sound" class="col-md-4 col-form-label">Audio link</label>
-      <div class="col-md-6">
-        <app-field>
-          <input formControlName="sound" type="text" class="form-control" id="sound" placeholder="Audio Link">
-        </app-field>
-      </div>
+    <div class="row">
       <div class="col-md-2">
-        <button *ngIf ="formControls.sound.valid && formControls.sound.value"
-                class="btn btn-primary"
-                (click)="onPlaySound()">Sound</button>
+        <div class="media-preview d-flex justify-content-center align-items-center">
+          <img [class.d-none] = "!this.isImageUrlValid"
+               [src]="formControls.picture.value"
+               (load)="onLoadImageUrlSuccess()"
+               (error)="onLoadImageUrlFail()"
+               class="img-thumbnail">
+          <fa-icon *ngIf="!isImageUrlValid"
+                   [size]="'lg'"
+                   [icon]="notExistIcon"></fa-icon>
+        </div>
+      </div>
+      <div class="col-md-10">
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="name">Name</label>
+            <app-field>
+              <input formControlName="name" type="text" class="form-control" id="name" placeholder="Name">
+            </app-field>
+          </div>
+          <div class="form-group col-md-8">
+            <label for="vocab">Vocabulary</label>
+            <input formControlName="vocab" type="text" class="form-control" id="vocab" placeholder="Vocabulary">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="wordForm">WordForm</label>
+            <input formControlName="wordForm" type="text" class="form-control" id="wordForm" placeholder="WordForm">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="pronounce">Pronounce</label>
+            <input formControlName="pronounce" type="text" class="form-control" id="pronounce" placeholder="Pronounce">
+          </div>
+          <div class="form-group col-md-2">
+            <label for="level">Level</label>
+            <input formControlName="level" type="text" class="form-control" id="level" placeholder="Level">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="picture">Image link</label>
+            <app-field>
+              <input formControlName="picture" type="text" class="form-control" id="picture" placeholder="Image link">
+            </app-field>
+          </div>
+          <div class="form-group col-md-6">
+            <label class="audio-valid" for="sound">
+              Audio link
+            </label>
+            <app-field>
+              <div class="input-group">
+                <div *ngIf="formControls.sound.valid && formControls.sound.value" class="input-group-prepend">
+                  <span class="input-group-text d-flex justify-content-center align-items-center sound-valid" (click)="onPlaySound()">
+                    <fa-icon [icon]="playIcon"></fa-icon>
+                  </span>
+                </div>
+                <div *ngIf="!formControls.sound.valid || !formControls.sound.value" class="input-group-prepend">
+                  <span class="input-group-text d-flex justify-content-center align-items-center">
+                    <fa-icon [icon]="muteIcon"></fa-icon>
+                  </span>
+                </div>
+                <input formControlName="sound" type="text" class="form-control" id="sound" placeholder="Audio Link">
+              </div>
+            </app-field>
+            <!--        <div class="col-md-2">-->
+            <!--          <button *ngIf="formControls.sound.valid && formControls.sound.value"-->
+            <!--                  class="btn btn-primary"-->
+            <!--                  (click)="onPlaySound()">-->
+            <!--            <fa-icon [icon]="speakerIcon"></fa-icon>-->
+            <!--          </button>-->
+            <!--        </div>-->
+          </div>
+        </div>
       </div>
     </div>
-    <div class="form-group row">
-      <label for="name" class="col-md-4 col-form-label">Name</label>
-      <div class="col-md-8">
-        <app-field>
-          <input formControlName="name" type="text" class="form-control" id="name" placeholder="Name">
-        </app-field>
+
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="definition">Definition</label>
+        <textarea formControlName="definition" rows="10" class="form-control" id="definition"
+                  placeholder="Definition"></textarea>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="vocab" class="col-md-4 col-form-label">Vocabulary</label>
-      <div class="col-md-8">
-        <input formControlName="vocab" type="text" class="form-control" id="vocab" placeholder="Vocabulary">
+      <div class="form-group col-md-4">
+        <label for="example">Example</label>
+        <textarea formControlName="example" rows="10" class="form-control" id="example"
+                  placeholder="Example"></textarea>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="name" class="col-md-4 col-form-label">Level</label>
-      <div class="col-md-8">
-        <app-field>
-          <label for="level"></label><input formControlName="level" type="text" class="form-control" id="level" placeholder="Level">
-        </app-field>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="wordForm" class="col-md-4 col-form-label">WordForm</label>
-      <div class="col-md-8">
-        <input formControlName="wordForm" type="text" class="form-control" id="wordForm" placeholder="WordForm">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="pronounce" class="col-md-4 col-form-label">Pronounce</label>
-      <div class="col-md-8">
-        <input formControlName="pronounce" type="text" class="form-control" id="pronounce" placeholder="Pronounce">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="definition" class="col-md-4 col-form-label">Definition</label>
-      <div class="col-md-8">
-        <textarea formControlName="definition" class="form-control" id="definition" placeholder="Definition"></textarea>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="definition" class="col-md-4 col-form-label">Example</label>
-      <div class="col-md-8">
-        <label for="example"></label><textarea formControlName="example" class="form-control" id="example" placeholder="Example"></textarea>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="advanced" class="col-md-4 col-form-label">Advanced</label>
-      <div class="col-md-8">
-        <textarea formControlName="advanced" class="form-control" id="advanced" placeholder="Advanced"></textarea>
+      <div class="form-group col-md-4">
+        <label for="advanced">Advanced</label>
+        <textarea formControlName="advanced" rows="10" class="form-control" id="advanced"
+                  placeholder="Advanced"></textarea>
       </div>
     </div>
   </form>
-  <div class="row">
-    <div class="col-md-6">
-      <button [disabled]="!this.form.valid" class="btn btn-primary" kendoButton (click)="onSave()" [primary]="true">Save</button>
-    </div>
-    <div class="col-md-6">
-      <button class="btn btn-secondary" kendoButton (click)="onClose()">Cancel</button>
-    </div>
-  </div>
+  <kendo-dialog-actions>
+    <button [disabled]="!this.form.valid" class="btn btn-primary" kendoButton (click)="onSave()" [primary]="true">
+      <fa-icon [icon]="checkIcon"></fa-icon>
+    </button>
+    <button class="btn btn-danger" kendoButton (click)="onClose()">
+      <fa-icon [icon]="timesIcon"></fa-icon>
+    </button>
+  </kendo-dialog-actions>
 </kendo-dialog>

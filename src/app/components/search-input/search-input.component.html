@@ -1,10 +1,10 @@
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12 text-center">
     <h1>Insert your vocabulary file</h1>
   </div>
   <div class="col-md-12">
     <kendo-upload
-      [withCredentials]="false"
+      [withCredentials]="false"type
       [autoUpload]="true"
       [saveUrl]="savUrl"
       (success)="onSuccess($event)"
@@ -12,17 +12,21 @@
     </kendo-upload>
   </div>
   <div class="col-md-12">
+  </div>
+  <div class="col-md-12 text-center">
     <h1>or type yours</h1>
   </div>
-  <div class="col-md-11">
+  <div class="col-md-11 pr-2">
     <kendo-multiselect [data]="wordList" (keyup.enter)="onInsertWord()" [(value)]="insertedWords"></kendo-multiselect>
   </div>
   <div class="col-md-1">
-    <button class="btn btn-primary"
+    <button class="btn btn-primary w-100 pl-2"
             [disabled]="this.insertedWords.length <= 0"
-            (click)="onGetAnkiObjects()">Get
+            (click)="onGetAnkiObjects()">
+      <fa-icon [icon]="searchIcon" [size]="'lg'"></fa-icon>
     </button>
   </div>
 </div>
 <app-search-result *ngIf="result.length" [data]="result"
-                   (updateData)="updateData($event)"></app-search-result>
+                   (updateData)="updateData($event)">
+</app-search-result>

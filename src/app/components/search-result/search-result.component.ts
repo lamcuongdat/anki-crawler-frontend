@@ -4,6 +4,7 @@ import {CellClickEvent, RemoveEvent} from "@progress/kendo-angular-grid";
 import {EditDialogComponent} from "../edit-dialog/edit-dialog.component";
 import {SoundUtil} from "../../utils/sound.util";
 import {ExportToCsv, Options} from "export-to-csv";
+import {faFileDownload, faPlay, faTrash} from '@fortawesome/free-solid-svg-icons';
 export interface KendoGridColumn {
   field: string;
 }
@@ -33,6 +34,9 @@ export class SearchResultComponent implements OnInit {
     useBom: true,
     useKeysAsHeaders: true,
   };
+  downloadIcon = faFileDownload;
+  speakerIcon = faPlay;
+  deleteIcon = faTrash;
 
   constructor() { }
 

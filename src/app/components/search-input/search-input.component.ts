@@ -4,6 +4,7 @@ import {AnkiDto} from "../../dtos/AnkiDto";
 import {MultiSelectComponent} from "@progress/kendo-angular-dropdowns";
 import {environment} from "../../../environments/environment";
 import {WordToAnkiService} from "../../services/word-to-anki.service";
+import {faSearch} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-search-input',
@@ -17,6 +18,7 @@ export class SearchInputComponent implements OnInit {
   insertedWords: string[] = [];
   savUrl: string = `${environment.apiUrl}/files`;
   @ViewChild(MultiSelectComponent) multiSelectComponent: MultiSelectComponent;
+  searchIcon = faSearch;
 
   constructor(private wordToAnkiService: WordToAnkiService,
               private changeDetectorRef: ChangeDetectorRef) {

@@ -15,7 +15,7 @@ import {EditDialogComponent} from './components/edit-dialog/edit-dialog.componen
 import {FieldComponent} from './components/field/field.component';
 import {ButtonModule} from "@progress/kendo-angular-buttons";
 import {MultiSelectModule} from "@progress/kendo-angular-dropdowns";
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -37,7 +37,8 @@ import {MultiSelectModule} from "@progress/kendo-angular-dropdowns";
     DialogsModule,
     RowFilterModule,
     ButtonModule,
-    MultiSelectModule
+    MultiSelectModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

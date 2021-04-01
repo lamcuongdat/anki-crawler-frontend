@@ -10,6 +10,13 @@ import {
 import {AnkiDto} from "../../dtos/AnkiDto";
 import {SoundUtil} from "../../utils/sound.util";
 import {Observable, of} from "rxjs";
+import {
+  faCheck,
+  faExclamation,
+  faTimes,
+  faVolumeMute,
+  faVolumeUp
+} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-edit-dialog',
@@ -19,6 +26,7 @@ import {Observable, of} from "rxjs";
 export class EditDialogComponent implements OnInit {
   @Input() open = false;
   @Output() save = new EventEmitter<AnkiDto>();
+  isImageUrlValid = true;
   formControls = {
     name: new FormControl(undefined, [Validators.required]),
     vocab: new FormControl(),
@@ -33,6 +41,11 @@ export class EditDialogComponent implements OnInit {
     sound: new FormControl(undefined,[], [this.soundUrlValidator()])
   }
   form: FormGroup = new FormGroup(this.formControls);
+  checkIcon = faCheck;
+  timesIcon = faTimes;
+  playIcon = faVolumeUp;
+  muteIcon = faVolumeMute;
+  notExistIcon = faExclamation;
   constructor() { }
   ngOnInit(): void {
   }
@@ -86,5 +99,13 @@ export class EditDialogComponent implements OnInit {
         });
       })
     };
+  }
+
+  onLoadImageUrlFail() {
+    this.isImageUrlValid = false;
+  }
+
+  onLoadImageUrlSuccess() {
+    this.isImageUrlValid = true;
   }
 }
