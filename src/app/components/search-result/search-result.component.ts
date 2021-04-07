@@ -4,10 +4,22 @@ import {CellClickEvent, RemoveEvent} from "@progress/kendo-angular-grid";
 import {EditDialogComponent} from "../edit-dialog/edit-dialog.component";
 import {SoundUtil} from "../../utils/sound.util";
 import {ExportToCsv, Options} from "export-to-csv";
-import {faFileDownload, faPlay, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {
+  faFileAudio,
+  faFileCsv,
+  faTrash,
+  faVolumeUp
+} from '@fortawesome/free-solid-svg-icons';
+import {MediaService} from "../../services/media.service";
+import * as FileSaver from "file-saver";
+import {StringUtil} from "../../utils/string.util";
+import * as JSZip from 'jszip';
+import {SoundDto} from "../../dtos/SoundDto";
+
 export interface KendoGridColumn {
   field: string;
 }
+
 @Component({
   selector: 'app-search-result',
   templateUrl: './search-result.component.html',
@@ -34,11 +46,13 @@ export class SearchResultComponent implements OnInit {
     useBom: true,
     useKeysAsHeaders: true,
   };
-  downloadIcon = faFileDownload;
-  speakerIcon = faPlay;
+  csvFileIcon = faFileCsv;
+  audioFileIcon = faFileAudio;
+  speakerIcon = faVolumeUp;
   deleteIcon = faTrash;
 
-  constructor() { }
+  constructor(private mediaService: MediaService) {
+  }
 
   ngOnInit(): void {
   }
@@ -78,5 +92,27 @@ export class SearchResultComponent implements OnInit {
     })
     const csvExporter = new ExportToCsv(this.csvExportOptions);
     csvExporter.generateCsv(exportData);
+  }
+
+  onDownloadAllSounds() {
+    const urls = this.data.map((anki: AnkiDto) => anki.sound);
+    this.mediaService.getAudioBlobs(urls).subscribe((sounds: SoundDto[]) => {
+      let zip = new JSZip();
+      let folder = zip.folder("sound");
+      console.log(this.data)
+      sounds.forEach((sound: SoundDto) => {
+        const ankiDto: AnkiDto | undefined = this.data.find((anki: AnkiDto) => anki.sound == sound.url);
+        if (folder && ankiDto) {
+          folder.file(`${StringUtil.correctFileName(ankiDto.name)}.mp3`,
+            StringUtil.b64toBlob(sound.blob), {base64: true});
+        }
+      })
+      if (folder) {
+        zip.generateAsync({type: "blob"})
+          .then(function (content) {
+            FileSaver.saveAs(content, "sound.zip");
+          });
+      }
+    })
   }
 }

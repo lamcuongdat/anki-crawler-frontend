@@ -1,0 +1,18 @@
+@import "src/variables";
+.general-info {
+  .level {
+    background-color: $primary-blue;
+    color: $white;
+    padding: 0 standard-calculator(1);
+    border-radius: standard-calculator(0.5);
+  }
+  .word-form {
+    background-color: $secondary-gray;
+    color: $primary-dark-gray;
+    padding: 0 standard-calculator(1);
+    border-radius: standard-calculator(0.5);
+  }
+  .pronounce {
+    font-style: italic;
+  }
+}

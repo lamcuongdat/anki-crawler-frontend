@@ -2,3 +2,50 @@
 @import "~@progress/kendo-theme-bootstrap/dist/all.scss";
 @import '~font-awesome/css/font-awesome.css';
 @import "variables";
+
+button:not(:disabled) {
+  &.app-primary {
+    background-color: $primary-blue;
+    color: $white;
+    &:hover {
+      background-color: $secondary-blue;
+      color: $white;
+    }
+  }
+
+  &.app-secondary {
+    background-color: $primary-yellow;
+    color: $white;
+    &:hover {
+      background-color: $secondary-yellow;
+      color: $white;
+    }
+  }
+
+  &.app-danger {
+    background-color: $primary-red;
+    color: $white;
+    &:hover {
+      background-color: $secondary-red;
+      color: $white;
+    }
+  }
+
+  &.app-info {
+    background-color: $primary-cyan;
+    color: $white;
+    &:hover {
+      background-color: $secondary-cyan;
+      color: $white;
+    }
+  }
+}
+
+button:disabled {
+  background-color: $secondary-gray;
+  color: $primary-dark-gray;
+  &:hover {
+    background-color: $secondary-gray;
+    color: $primary-dark-gray;
+  }
+}

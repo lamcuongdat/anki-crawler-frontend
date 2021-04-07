@@ -20,7 +20,7 @@
     <kendo-multiselect [data]="wordList" (keyup.enter)="onInsertWord()" [(value)]="insertedWords"></kendo-multiselect>
   </div>
   <div class="col-md-1">
-    <button class="btn btn-primary w-100 pl-2"
+    <button class="btn w-100 pl-2 app-primary"
             [disabled]="this.insertedWords.length <= 0"
             (click)="onGetAnkiObjects()">
       <fa-icon [icon]="searchIcon" [size]="'lg'"></fa-icon>

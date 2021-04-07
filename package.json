@@ -49,6 +49,7 @@
     "export-to-csv": "^0.2.1",
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
+    "jszip": "^3.6.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"

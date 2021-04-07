@@ -1,51 +1,62 @@
 <div class="row">
-  <div class="col-md-12 pt-2">
-    <button class="btn btn-primary w-100 d-flex justify-content-center"
+  <div class="col-md-6 pt-2">
+    <button class="btn w-100 d-flex justify-content-center align-items-center app-secondary"
             (click)="onExportCSV()">
-      <fa-icon [icon]="downloadIcon" [size]="'lg'"></fa-icon>
+      <fa-icon [icon]="csvFileIcon" [size]="'2x'"></fa-icon>
+      <strong class="text-uppercase pl-2">
+        Export to CSV
+      </strong>
+    </button>
+  </div>
+  <div class="col-md-6 pt-2">
+    <button class="btn w-100 d-flex justify-content-center align-items-center app-info"
+            (click)="onDownloadAllSounds()">
+      <fa-icon [icon]="audioFileIcon" [size]="'2x'"></fa-icon>
+      <strong class="text-uppercase pl-2">
+        Get all audio files
+      </strong>
     </button>
   </div>
   <div class="col-md-12 pt-2">
     <kendo-grid
       (cellClick)="onEdit($event)"
       [data]="data"
-      (remove)="onRemove($event)"
-      [height]="600">
+      (remove)="onRemove($event)">
       <kendo-grid-command-column title="" [width]="100">
         <ng-template kendoGridCellTemplate>
           <div class="text-center">
-            <button kendoButton kendoGridRemoveCommand [look]="'flat'">
+            <button kendoButton kendoGridRemoveCommand class="app-danger btn">
               <fa-icon [icon]="deleteIcon" [size]="'lg'"></fa-icon>
             </button>
           </div>
         </ng-template>
       </kendo-grid-command-column>
       <kendo-grid-column
-        [title]="'Image'"
+        [title]="'Media'"
         [field]="'picture'"
         [width]="150">
         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
           <img class="img-thumbnail" [src]="dataItem.picture" alt="anki-crawler-pic">
+          <button *ngIf="dataItem?.sound" class="btn app-info w-100" (click)="onPlaySound(dataItem.sound)">
+            <fa-icon [icon]="speakerIcon"></fa-icon>
+          </button>
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column [title]="'Audio'" [field]="'sound'" [width]="100">
+      <kendo-grid-column [title]="'General Info'" [field]="'sound'" [width]="200">
         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-          <div class="text-center">
-            <button *ngIf="dataItem.sound" class="btn btn-primary" (click)="onPlaySound(dataItem.sound)">
-              <fa-icon [icon]="speakerIcon"></fa-icon>
-            </button>
+          <div class="text-center general-info">
+            <div class="d-inline-block level mr-1" *ngIf="dataItem?.level">{{dataItem.level}}</div>
+            <div class="d-inline-block word-form" *ngIf="dataItem?.wordForm">{{dataItem.wordForm}}</div>
+            <div class="pronounce" *ngIf="dataItem?.pronounce">{{dataItem.pronounce}}</div>
           </div>
         </ng-template>
       </kendo-grid-column>
       <kendo-grid-column [title]="'Name'" [field]="'name'" [width]="150"></kendo-grid-column>
       <kendo-grid-column [title]="'Vocab'" [field]="'vocab'" [width]="150"></kendo-grid-column>
-      <kendo-grid-column [title]="'Level'" [field]="'level'" [width]="100"></kendo-grid-column>
-      <kendo-grid-column [title]="'WordForm'" [field]="'wordForm'" [width]="100"></kendo-grid-column>
-      <kendo-grid-column [title]="'Pronounce'" [field]="'pronounce'" [width]="200"></kendo-grid-column>
       <kendo-grid-column [title]="'Definition'" [field]="'definition'" [width]="500"></kendo-grid-column>
-      <kendo-grid-column [title]="'Hint'" [field]="'hint'"></kendo-grid-column>
-      <kendo-grid-column [title]="'Example'" [field]="'example'"></kendo-grid-column>
-      <kendo-grid-column [title]="'Advanced'" [field]="'advanced'"></kendo-grid-column>
+      <kendo-grid-column [title]="'Hint'" [field]="'hint'" [width]="150"></kendo-grid-column>
+      <kendo-grid-column [title]="'Example'" [field]="'example'" [width]="200"></kendo-grid-column>
+      <kendo-grid-column [title]="'Advanced'" [field]="'advanced'" [width]="200"></kendo-grid-column>
     </kendo-grid>
   </div>
 </div>

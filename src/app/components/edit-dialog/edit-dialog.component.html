@@ -104,10 +104,10 @@
     </div>
   </form>
   <kendo-dialog-actions>
-    <button [disabled]="!this.form.valid" class="btn btn-primary" kendoButton (click)="onSave()" [primary]="true">
+    <button [disabled]="!this.form.valid" class="btn app-primary" kendoButton (click)="onSave()">
       <fa-icon [icon]="checkIcon"></fa-icon>
     </button>
-    <button class="btn btn-danger" kendoButton (click)="onClose()">
+    <button class="btn app-danger" kendoButton (click)="onClose()">
       <fa-icon [icon]="timesIcon"></fa-icon>
     </button>
   </kendo-dialog-actions>
