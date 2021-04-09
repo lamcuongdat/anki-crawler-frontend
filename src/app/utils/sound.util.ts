@@ -19,6 +19,7 @@ export class SoundUtil {
       audio.play().then((fulfillValue) => {
         resolve(true);
       }, (rejectValue) => {
+        console.log(rejectValue)
         resolve(false);
       });
     });
