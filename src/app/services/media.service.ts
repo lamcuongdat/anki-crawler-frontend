@@ -11,7 +11,11 @@ export class MediaService {
 
   constructor(private http: HttpClient) { }
 
-  getAudioBlobs(urls: string[]): Observable<SoundDto[]> {
-    return this.http.get<SoundDto[]>(`${environment.apiUrl}/audio`, {params: {urls}});
+  getAudioBlobs(audioUrls: string[]): Observable<SoundDto[]> {
+    return this.http.get<SoundDto[]>(`${environment.apiUrl}/audio-files`, {params: {audioUrls}});
+  }
+
+  getAudioBlob(audioUrl: string): Observable<SoundDto> {
+    return this.http.get<SoundDto>(`${environment.apiUrl}/audio-file`, {params: {audioUrl}});
   }
 }

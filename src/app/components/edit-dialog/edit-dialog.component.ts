@@ -17,6 +17,7 @@ import {
   faVolumeMute,
   faVolumeUp
 } from "@fortawesome/free-solid-svg-icons";
+import {MediaService} from "../../services/media.service";
 
 @Component({
   selector: 'app-edit-dialog',
@@ -46,7 +47,7 @@ export class EditDialogComponent implements OnInit {
   playIcon = faVolumeUp;
   muteIcon = faVolumeMute;
   notExistIcon = faExclamation;
-  constructor() { }
+  constructor(private mediaService: MediaService) { }
   ngOnInit(): void {
   }
 
@@ -81,7 +82,7 @@ export class EditDialogComponent implements OnInit {
   }
 
   onPlaySound(): void {
-    SoundUtil.playSound(this.formControls.sound.value);
+    SoundUtil.playSound(this.formControls.sound.value, this.mediaService);
   }
 
   soundUrlValidator(): AsyncValidatorFn {
@@ -89,9 +90,9 @@ export class EditDialogComponent implements OnInit {
       if (!control.value) {
         return of(null);
       }
-      return SoundUtil.checkSound(control.value).then((result) => {
+      return SoundUtil.checkSound(control.value, this.mediaService).then((result) => {
         return new Promise<{ [key: string]: any } | null>((resolve) => {
-          if (result) {
+          if (result.valid) {
             resolve(null);
           } else {
             resolve({'valid': false});

@@ -75,7 +75,7 @@ export class SearchResultComponent implements OnInit {
   }
 
   onPlaySound(sound: string): void {
-    SoundUtil.playSound(sound);
+    SoundUtil.playSound(sound, this.mediaService);
   }
 
   onExportCSV(): void {
@@ -99,7 +99,6 @@ export class SearchResultComponent implements OnInit {
     this.mediaService.getAudioBlobs(urls).subscribe((sounds: SoundDto[]) => {
       let zip = new JSZip();
       let folder = zip.folder("sound");
-      console.log(this.data)
       sounds.forEach((sound: SoundDto) => {
         const ankiDto: AnkiDto | undefined = this.data.find((anki: AnkiDto) => anki.sound == sound.url);
         if (folder && ankiDto) {
