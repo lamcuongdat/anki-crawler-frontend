@@ -1,27 +1,13 @@
-import {MediaService} from "../services/media.service";
-import {SoundDto} from "../dtos/SoundDto";
 import {StringUtil} from "./string.util";
+
 export interface SoundCheck {
   valid: boolean;
   blobData: Blob;
 }
 export class SoundUtil {
-  public static playSound(url: string, mediaService: MediaService): void{
-    this.checkSound(url, mediaService).then((result) => {
-      if (result.valid) {
-        let file = new File([result.blobData], "audio.mp3")
-        let audio = new Audio();
-        audio.src = URL.createObjectURL(file);
-        audio.load();
-        audio.play();
-      }
-    })
-  }
-
-  public static checkSound(url: string, mediaService: MediaService): Promise<SoundCheck> {
+  public static checkSoundWithBlob(blob: string): Promise<SoundCheck> {
     return new Promise<SoundCheck>((resolve) => {
-      mediaService.getAudioBlob(url).subscribe((sound: SoundDto) => {
-        let file = new File([StringUtil.b64toBlob(sound.blob)], "audio.mp3")
+        let file = new File([StringUtil.b64toBlob(blob)], "audio.mp3")
         let audio = new Audio();
         audio.src = URL.createObjectURL(file);
         audio.load();
@@ -29,7 +15,7 @@ export class SoundUtil {
         audio.play().then((fulfillValue) => {
           resolve({
             valid: true,
-            blobData: StringUtil.b64toBlob(sound.blob)
+            blobData: StringUtil.b64toBlob(blob)
           });
         }, (rejectValue) => {
           console.log(rejectValue)
@@ -38,7 +24,18 @@ export class SoundUtil {
             blobData: new Blob()
           });
         });
-      })
     });
+  }
+
+  public static playSoundWithBlob(blob: string): void {
+    this.checkSoundWithBlob(blob).then((result) => {
+      if (result.valid) {
+        let file = new File([result.blobData], "audio.mp3")
+        let audio = new Audio();
+        audio.src = URL.createObjectURL(file);
+        audio.load();
+        audio.play();
+      }
+    })
   }
 }

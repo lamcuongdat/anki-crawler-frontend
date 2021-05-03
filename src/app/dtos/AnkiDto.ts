@@ -10,4 +10,5 @@ export class AnkiDto {
   advanced: string = '';
   picture: string = '';
   sound: string = '';
+  soundBlob: string = '';
 }

@@ -28,7 +28,9 @@
           </div>
           <div class="form-group col-md-8">
             <label for="vocab">Vocabulary</label>
-            <input formControlName="vocab" type="text" class="form-control" id="vocab" placeholder="Vocabulary">
+            <input formControlName="vocab" type="text" class="form-control" id="vocab" placeholder="Vocabulary"
+            (change)="onVocabChange()"
+            (input)="onVocabInput()">
           </div>
         </div>
 
@@ -48,38 +50,17 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-10">
             <label for="picture">Image link</label>
             <app-field>
               <input formControlName="picture" type="text" class="form-control" id="picture" placeholder="Image link">
             </app-field>
           </div>
-          <div class="form-group col-md-6">
-            <label class="audio-valid" for="sound">
-              Audio link
-            </label>
-            <app-field>
-              <div class="input-group">
-                <div *ngIf="formControls.sound.valid && formControls.sound.value" class="input-group-prepend">
-                  <span class="input-group-text d-flex justify-content-center align-items-center sound-valid" (click)="onPlaySound()">
-                    <fa-icon [icon]="playIcon"></fa-icon>
-                  </span>
-                </div>
-                <div *ngIf="!formControls.sound.valid || !formControls.sound.value" class="input-group-prepend">
-                  <span class="input-group-text d-flex justify-content-center align-items-center">
-                    <fa-icon [icon]="muteIcon"></fa-icon>
-                  </span>
-                </div>
-                <input formControlName="sound" type="text" class="form-control" id="sound" placeholder="Audio Link">
-              </div>
-            </app-field>
-            <!--        <div class="col-md-2">-->
-            <!--          <button *ngIf="formControls.sound.valid && formControls.sound.value"-->
-            <!--                  class="btn btn-primary"-->
-            <!--                  (click)="onPlaySound()">-->
-            <!--            <fa-icon [icon]="speakerIcon"></fa-icon>-->
-            <!--          </button>-->
-            <!--        </div>-->
+          <div class="form-group col-md-2">
+            <label for="picture">Listen</label>
+            <button class="btn app-info w-100" (click)="onPlaySound()">
+              <fa-icon [icon]="playIcon"></fa-icon>
+            </button>
           </div>
         </div>
       </div>

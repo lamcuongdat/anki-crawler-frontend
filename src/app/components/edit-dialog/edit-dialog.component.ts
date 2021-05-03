@@ -1,23 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {
-  AbstractControl,
-  AsyncValidatorFn,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  Validators
-} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AnkiDto} from "../../dtos/AnkiDto";
 import {SoundUtil} from "../../utils/sound.util";
-import {Observable, of} from "rxjs";
-import {
-  faCheck,
-  faExclamation,
-  faTimes,
-  faVolumeMute,
-  faVolumeUp
-} from "@fortawesome/free-solid-svg-icons";
-import {MediaService} from "../../services/media.service";
+import {faCheck, faExclamation, faPlay, faTimes, faVolumeMute} from "@fortawesome/free-solid-svg-icons";
+import {WordToAnkiService} from "../../services/word-to-anki.service";
 
 @Component({
   selector: 'app-edit-dialog',
@@ -39,15 +25,16 @@ export class EditDialogComponent implements OnInit {
     example: new FormControl(),
     advanced: new FormControl(),
     picture: new FormControl(),
-    sound: new FormControl(undefined,[], [this.soundUrlValidator()])
+    sound: new FormControl(),
+    soundBlob: new FormControl()
   }
   form: FormGroup = new FormGroup(this.formControls);
   checkIcon = faCheck;
   timesIcon = faTimes;
-  playIcon = faVolumeUp;
+  playIcon = faPlay;
   muteIcon = faVolumeMute;
   notExistIcon = faExclamation;
-  constructor(private mediaService: MediaService) { }
+  constructor(private wordToAnkiService: WordToAnkiService) { }
   ngOnInit(): void {
   }
 
@@ -79,27 +66,11 @@ export class EditDialogComponent implements OnInit {
     this.formControls.advanced.setValue(anki.advanced);
     this.formControls.picture.setValue(anki.picture);
     this.formControls.sound.setValue(anki.sound);
+    this.formControls.soundBlob.setValue(anki.soundBlob);
   }
 
   onPlaySound(): void {
-    SoundUtil.playSound(this.formControls.sound.value, this.mediaService);
-  }
-
-  soundUrlValidator(): AsyncValidatorFn {
-    return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
-      if (!control.value) {
-        return of(null);
-      }
-      return SoundUtil.checkSound(control.value, this.mediaService).then((result) => {
-        return new Promise<{ [key: string]: any } | null>((resolve) => {
-          if (result.valid) {
-            resolve(null);
-          } else {
-            resolve({'valid': false});
-          }
-        });
-      })
-    };
+    SoundUtil.playSoundWithBlob(this.formControls.soundBlob.value);
   }
 
   onLoadImageUrlFail() {
@@ -108,5 +79,32 @@ export class EditDialogComponent implements OnInit {
 
   onLoadImageUrlSuccess() {
     this.isImageUrlValid = true;
+  }
+
+  onVocabChange() {
+    let vocab = this.formControls.vocab.value;
+    vocab = vocab.trim();
+    if (!vocab) {
+      return;
+    }
+    vocab = vocab.toLowerCase();
+    this.wordToAnkiService.getAnkiObjects(vocab)
+      .subscribe((ankis: AnkiDto[]) => {
+        const anki: AnkiDto = ankis[0];
+        if (anki) {
+          console.log(anki)
+          this.formControls.sound.setValue(anki.sound)
+          this.formControls.soundBlob.setValue(anki.soundBlob)
+        }
+      })
+  }
+
+  onVocabInput() {
+    let vocab = this.formControls.vocab.value;
+    if (!vocab) {
+      return;
+    }
+    vocab = vocab.toUpperCase();
+    this.formControls.vocab.setValue(vocab);
   }
 }

@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -15,7 +15,8 @@ import {EditDialogComponent} from './components/edit-dialog/edit-dialog.componen
 import {FieldComponent} from './components/field/field.component';
 import {ButtonModule} from "@progress/kendo-angular-buttons";
 import {MultiSelectModule} from "@progress/kendo-angular-dropdowns";
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 @NgModule({
   declarations: [
@@ -38,10 +39,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     RowFilterModule,
     ButtonModule,
     MultiSelectModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgxSpinnerModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
 }

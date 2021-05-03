@@ -4,17 +4,12 @@ import {CellClickEvent, RemoveEvent} from "@progress/kendo-angular-grid";
 import {EditDialogComponent} from "../edit-dialog/edit-dialog.component";
 import {SoundUtil} from "../../utils/sound.util";
 import {ExportToCsv, Options} from "export-to-csv";
-import {
-  faFileAudio,
-  faFileCsv,
-  faTrash,
-  faVolumeUp
-} from '@fortawesome/free-solid-svg-icons';
-import {MediaService} from "../../services/media.service";
+import {faFileAudio, faFileCsv, faTrash, faVolumeUp} from '@fortawesome/free-solid-svg-icons';
 import * as FileSaver from "file-saver";
 import {StringUtil} from "../../utils/string.util";
 import * as JSZip from 'jszip';
-import {SoundDto} from "../../dtos/SoundDto";
+import {AnkiExportCsvDto} from "../../dtos/AnkiExportCsvDto";
+import {MappetUtil} from "../../utils/mappet.util";
 
 export interface KendoGridColumn {
   field: string;
@@ -51,7 +46,7 @@ export class SearchResultComponent implements OnInit {
   speakerIcon = faVolumeUp;
   deleteIcon = faTrash;
 
-  constructor(private mediaService: MediaService) {
+  constructor() {
   }
 
   ngOnInit(): void {
@@ -74,44 +69,33 @@ export class SearchResultComponent implements OnInit {
     this.updateData.emit(this.data);
   }
 
-  onPlaySound(sound: string): void {
-    SoundUtil.playSound(sound, this.mediaService);
+  onPlaySound(blob: string): void {
+    if (!blob) {
+      return;
+    }
+    SoundUtil.playSoundWithBlob(blob);
   }
 
   onExportCSV(): void {
-    const exportData = [...this.data];
-    const header = new AnkiDto();
-    exportData.forEach((anki: AnkiDto) => {
-      Object.keys(header).forEach(key => {
-        // @ts-ignore
-        if (!anki[key]) {
-          // @ts-ignore
-          anki[key] = '';
-        }
-      })
-    })
+    const exportData: AnkiExportCsvDto[] = [...this.data.map((anki: AnkiDto) => MappetUtil.ankiToAnkiExportCsv(anki))];
     const csvExporter = new ExportToCsv(this.csvExportOptions);
     csvExporter.generateCsv(exportData);
   }
 
   onDownloadAllSounds() {
-    const urls = this.data.map((anki: AnkiDto) => anki.sound);
-    this.mediaService.getAudioBlobs(urls).subscribe((sounds: SoundDto[]) => {
-      let zip = new JSZip();
-      let folder = zip.folder("sound");
-      sounds.forEach((sound: SoundDto) => {
-        const ankiDto: AnkiDto | undefined = this.data.find((anki: AnkiDto) => anki.sound == sound.url);
-        if (folder && ankiDto) {
-          folder.file(`${StringUtil.correctFileName(ankiDto.name)}.mp3`,
-            StringUtil.b64toBlob(sound.blob), {base64: true});
-        }
-      })
-      if (folder) {
-        zip.generateAsync({type: "blob"})
-          .then(function (content) {
-            FileSaver.saveAs(content, "sound.zip");
-          });
+    let zip = new JSZip();
+    let folder = zip.folder("sound");
+    this.data.forEach((ankiDto: AnkiDto) => {
+      if (folder && ankiDto) {
+        folder.file(`${StringUtil.correctFileName(ankiDto.name)}.mp3`,
+          StringUtil.b64toBlob(ankiDto.soundBlob), {base64: true});
       }
     })
+    if (folder) {
+      zip.generateAsync({type: "blob"})
+        .then(function (content) {
+          FileSaver.saveAs(content, "sound.zip");
+        });
+    }
   }
 }

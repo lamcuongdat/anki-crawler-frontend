@@ -37,7 +37,7 @@
         [width]="150">
         <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
           <img class="img-thumbnail" [src]="dataItem.picture" alt="anki-crawler-pic">
-          <button *ngIf="dataItem?.sound" class="btn app-info w-100" (click)="onPlaySound(dataItem.sound)">
+          <button *ngIf="dataItem?.sound" class="btn app-info w-100" (click)="onPlaySound(dataItem.soundBlob)">
             <fa-icon [icon]="speakerIcon"></fa-icon>
           </button>
         </ng-template>
