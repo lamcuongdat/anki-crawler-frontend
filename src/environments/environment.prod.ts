@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://anki-crawler-backend.herokuapp.com'
+  apiUrl: 'https://anki-crawler-backend.herokuapp.com',
+  appSignature: 'AnkiCrawler'
 };
