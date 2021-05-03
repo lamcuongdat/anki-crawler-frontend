@@ -92,7 +92,6 @@ export class EditDialogComponent implements OnInit {
       .subscribe((ankis: AnkiDto[]) => {
         const anki: AnkiDto = ankis[0];
         if (anki) {
-          console.log(anki)
           this.formControls.sound.setValue(anki.sound)
           this.formControls.soundBlob.setValue(anki.soundBlob)
         }

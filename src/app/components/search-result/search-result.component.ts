@@ -10,6 +10,8 @@ import {StringUtil} from "../../utils/string.util";
 import * as JSZip from 'jszip';
 import {AnkiExportCsvDto} from "../../dtos/AnkiExportCsvDto";
 import {MappetUtil} from "../../utils/mappet.util";
+import {DateUtil} from "../../utils/date.util";
+import {environment} from "../../../environments/environment";
 
 export interface KendoGridColumn {
   field: string;
@@ -34,7 +36,7 @@ export class SearchResultComponent implements OnInit {
     fieldSeparator: ',',
     quoteStrings: '"',
     decimalSeparator: '.',
-    filename: 'exported',
+    filename: '',
     showLabels: true,
     showTitle: false,
     useTextFile: false,
@@ -78,6 +80,7 @@ export class SearchResultComponent implements OnInit {
 
   onExportCSV(): void {
     const exportData: AnkiExportCsvDto[] = [...this.data.map((anki: AnkiDto) => MappetUtil.ankiToAnkiExportCsv(anki))];
+    this.csvExportOptions.filename = `${environment.appSignature}-${DateUtil.now(DateUtil.DATE_TIME_NO_SPACE_FORMAT)}-Vocabulary`
     const csvExporter = new ExportToCsv(this.csvExportOptions);
     csvExporter.generateCsv(exportData);
   }
@@ -94,7 +97,7 @@ export class SearchResultComponent implements OnInit {
     if (folder) {
       zip.generateAsync({type: "blob"})
         .then(function (content) {
-          FileSaver.saveAs(content, "sound.zip");
+          FileSaver.saveAs(content, `${environment.appSignature}-${DateUtil.now(DateUtil.DATE_TIME_NO_SPACE_FORMAT)}-Audio.zip`);
         });
     }
   }
